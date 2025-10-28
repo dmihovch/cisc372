@@ -82,7 +82,7 @@ void convolute(Image* srcImage,Image* destImage,Matrix algorithm){
             return;
         }
         for(int i = 0; i<3; i++){
-            for(int j = 0; j<4; j++){
+            for(int j = 0; j<3; j++){
                 p->alg[i][j] = algorithm[i][j];
             }
         }
@@ -93,7 +93,7 @@ void convolute(Image* srcImage,Image* destImage,Matrix algorithm){
         if((i+1) == MAX_THREADS){
             p->endRow= srcImage->height;
         } else{
-            p->endRow= (rowsPerThread*i) + rowsPerThread - 1;
+            p->endRow= (rowsPerThread*i) + rowsPerThread/*-1 */ ;
         }
 
         pthread_create(threads+i,NULL, pthread_convolute, p);
@@ -117,7 +117,7 @@ void* pthread_convolute(void* payload){
     Payload* p = (Payload*) payload;
     int row, pix, bit, span, endRow;
     for(row = p->startRowIdx; row<p->endRow; row++){
-        for(pix=0;pix<p->src->height; pix++){
+        for(pix=0;pix<p->src->width; pix++){
             for(bit = 0; bit<p->src->bpp; bit++){
                 p->dest->data[Index(pix, row, p->src->width, bit, p->src->bpp)] = getPixelValue(p->src, pix, row,bit, p->alg);
             }
