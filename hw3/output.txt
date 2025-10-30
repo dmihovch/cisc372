@@ -1,0 +1,9 @@
+Script started on Thu Oct 30 15:01:50 2025
+]0;dmihovch@r1n45.darwin:~/cisc372/hw3[?1034h[dmihovch@r1n45 hw3]$ ./imagethread pic1.jpg blur
+Took 5 seconds
+]0;dmihovch@r1n45.darwin:~/cisc372/hw3[dmihovch@r1n45 hw3]$ ./imageomp pic1.jpg blur
+Took 8 seconds
+]0;dmihovch@r1n45.darwin:~/cisc372/hw3[dmihovch@r1n45 hw3]$ exit
+exit
+
+Script done on Thu Oct 30 15:02:21 2025

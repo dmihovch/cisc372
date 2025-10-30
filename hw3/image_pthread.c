@@ -74,8 +74,8 @@ void convolute(Image* srcImage,Image* destImage,Matrix algorithm){
     pthread_t threads[MAX_THREADS];
     int rowsPerThread = srcImage->height / MAX_THREADS;
 
-
-    for(int i = 0; i<MAX_THREADS; i++){
+	int i;
+    for(i = 0; i<MAX_THREADS; i++){
 
         Payload* p = calloc(1,sizeof(Payload));
         if(p == NULL){
@@ -96,7 +96,7 @@ void convolute(Image* srcImage,Image* destImage,Matrix algorithm){
 
     }
 
-    for(int i = 0; i<MAX_THREADS; i++){
+    for(i = 0; i<MAX_THREADS; i++){
         pthread_join(threads[i],NULL);
     }
 
