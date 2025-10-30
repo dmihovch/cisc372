@@ -5,12 +5,12 @@
 #include "image.h"
 #include <pthread.h>
 
-#define MAX_THREADS 8
+#define MAX_THREADS 20
 void* pthread_convolute(void*);
 typedef struct {
     Image* src;
     Image* dest;
-    Matrix alg;
+    Matrix* alg;
 
     int startRowIdx;
     int endRow;
@@ -81,19 +81,15 @@ void convolute(Image* srcImage,Image* destImage,Matrix algorithm){
         if(p == NULL){
             return;
         }
-        for(int i = 0; i<3; i++){
-            for(int j = 0; j<3; j++){
-                p->alg[i][j] = algorithm[i][j];
-            }
-        }
 
+        p->alg = (Matrix*)&algorithm;
         p->src = srcImage;
         p->dest = destImage;
         p->startRowIdx = rowsPerThread*i;
         if((i+1) == MAX_THREADS){
             p->endRow= srcImage->height;
         } else{
-            p->endRow= (rowsPerThread*i) + rowsPerThread/*-1 */ ;
+            p->endRow= (rowsPerThread*i) + rowsPerThread;
         }
 
         pthread_create(threads+i,NULL, pthread_convolute, p);
@@ -119,7 +115,7 @@ void* pthread_convolute(void* payload){
     for(row = p->startRowIdx; row<p->endRow; row++){
         for(pix=0;pix<p->src->width; pix++){
             for(bit = 0; bit<p->src->bpp; bit++){
-                p->dest->data[Index(pix, row, p->src->width, bit, p->src->bpp)] = getPixelValue(p->src, pix, row,bit, p->alg);
+                p->dest->data[Index(pix, row, p->src->width, bit, p->src->bpp)] = getPixelValue(p->src, pix, row,bit, *p->alg);
             }
         }
     }
